@@ -21,9 +21,12 @@
   body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
   .screen{display:none;}.screen.active{display:block;}
 
+  /* HEADER + PROGRESS STICKY WRAPPER */
+  .sticky-top{position:sticky;top:0;z-index:100;background:var(--bg);}
+
   /* HEADER */
-  .header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px;}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);}
+  .header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px;}
   .app-title{font-size:20px;font-weight:700;letter-spacing:-.5px;}
   .app-title span{color:var(--accent);}
   .header-right{display:flex;align-items:center;gap:8px;}
@@ -32,7 +35,7 @@
   .sync-dot.err{background:#E24B4A;}
   .sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-  .date-display{font-size:12px;color:var(--text2);padding:0 20px 10px;}
+  .date-display{font-size:12px;color:var(--text2);padding:0 20px 6px;}
   .menu-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 
   /* GROUP TABS */
@@ -46,16 +49,28 @@
   /* USER TABS */
   .user-tabs{display:flex;align-items:center;overflow-x:auto;padding:0 16px;scrollbar-width:none;border-top:1px solid var(--border);}
   .user-tabs::-webkit-scrollbar{display:none;}
-  .user-tab{flex-shrink:0;padding:8px 14px;font-size:13px;font-weight:500;color:var(--text3);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;font-family:'Noto Sans JP',sans-serif;}
+  .user-tab{flex-shrink:0;padding:8px 14px;font-size:13px;font-weight:500;color:var(--text3);border:none;background:transparent;cursor:grab;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;font-family:'Noto Sans JP',sans-serif;user-select:none;touch-action:none;}
   .user-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .user-tab.drag-dragging{opacity:0.3;background:var(--surface2);}
+  .user-tab.drag-over{border-bottom-color:var(--blue);color:var(--blue);}
+  .user-tab-ghost{position:fixed;pointer-events:none;z-index:9999;padding:8px 14px;font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-light);border:1.5px solid var(--accent);border-radius:8px;white-space:nowrap;font-family:'Noto Sans JP',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.18);opacity:.92;}
   .add-user-btn{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1.5px dashed var(--border2);background:transparent;color:var(--text3);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;margin-left:6px;-webkit-tap-highlight-color:transparent;}
   .add-user-btn:active{border-color:var(--accent);color:var(--accent);}
 
+  /* PROGRESS (sticky block) */
+  .progress-sticky{background:var(--bg);padding:8px 16px 8px;border-bottom:1px solid var(--border);}
+
   /* MAIN */
-  .main{padding:16px 16px 100px;max-width:480px;margin:0 auto;}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin:20px 0 10px;}
-  .progress-bar-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:4px;}
-  .progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .main{padding:12px 16px 100px;max-width:480px;margin:0 auto;}
+
+  /* PULL-TO-REFRESH */
+  .ptr-indicator{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:var(--surface);border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);transition:transform .2s;transform:translateX(-50%) translateY(-100%);pointer-events:none;}
+  .ptr-indicator.visible{transform:translateX(-50%) translateY(0);}
+  .ptr-spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;}
+  .progress-bar-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:10px 14px;margin-bottom:4px;}
+  .progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
   .progress-label{font-size:13px;color:var(--text2);}
   .progress-count{font-size:14px;font-weight:700;font-family:'DM Mono',monospace;}
   .bar-track{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;}
@@ -131,7 +146,14 @@
   .habit-card.drag-over-bottom{border-bottom:2.5px solid var(--accent);}
   .drag-ghost{position:fixed;pointer-events:none;z-index:500;opacity:.92;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18);transform:scale(1.03);}
 
-  /* ADD BAR */
+  /* GOAL COMMENTS */
+  .goal-comment-area{padding:4px 0 0;}
+  .goal-comment-item{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;background:var(--blue-light);border:1px solid rgba(24,95,165,.15);margin-bottom:3px;}
+  .goal-comment-text{flex:1;font-size:12px;color:var(--blue);line-height:1.4;word-break:break-all;}
+  .goal-comment-btn{width:20px;height:20px;border-radius:5px;border:none;background:transparent;color:var(--blue);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.6;-webkit-tap-highlight-color:transparent;}
+  .goal-comment-btn:active{opacity:1;background:rgba(24,95,165,.15);}
+
+
   .add-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:50;}
   .add-form{display:flex;gap:6px;align-items:center;}
   .add-input{flex:1;height:42px;border:1.5px solid var(--border2);border-radius:12px;padding:0 12px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
@@ -140,6 +162,7 @@
   .add-type-btn{height:42px;padding:0 10px;border-radius:12px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,color .15s;min-width:54px;text-align:center;}
   .add-type-btn.mode-occasional{border-color:var(--purple);background:var(--purple-light);color:var(--purple);}
   .add-type-btn.mode-quit{border-color:var(--red-mid);background:var(--red-light);color:var(--red);}
+  .add-type-btn.mode-goal{border-color:var(--blue);background:var(--blue-light);color:var(--blue);}
   .add-btn{width:42px;height:42px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
   .add-btn:active{transform:scale(.95);background:var(--accent-dark);}
 
@@ -184,7 +207,9 @@
   /* SHEET */
   .sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:flex-end;justify-content:center;}
   .sheet-overlay.open{display:flex;}
-  .sheet{background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:480px;animation:slideUp .24s cubic-bezier(.22,1,.36,1);max-height:90vh;overflow-y:auto;}
+  .sheet{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;animation:slideUp .24s cubic-bezier(.22,1,.36,1);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
+  .sheet-scroll{flex:1;overflow-y:auto;padding:20px 20px 8px;}
+  .sheet-footer{flex-shrink:0;padding:8px 20px calc(12px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);}
   @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
   .sheet-handle{width:36px;height:4px;background:var(--border2);border-radius:99px;margin:0 auto 20px;}
   .sheet-title{font-size:16px;font-weight:700;margin-bottom:16px;}
@@ -199,7 +224,7 @@
   .btn-icon.user-del{background:#FCEBEB;}
   .btn-icon.parent-icon{background:#EAF3DE;}
   .btn-desc{font-size:11px;color:var(--text3);font-weight:400;margin-top:1px;}
-  .sheet-close{width:100%;padding:14px;border-radius:12px;border:none;background:var(--surface2);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:14px;cursor:pointer;margin-top:4px;}
+  .sheet-close{width:100%;padding:14px;border-radius:12px;border:none;background:var(--surface2);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:14px;cursor:pointer;}
   .sheet-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
   .toggle-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);margin-bottom:8px;}
   .toggle-left{display:flex;align-items:center;gap:12px;}
@@ -266,6 +291,55 @@
   /* TOAST */
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:white;font-size:13px;padding:10px 16px;border-radius:99px;opacity:0;transition:opacity .2s,transform .2s;z-index:300;white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:4px;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+
+  /* ANALYTICS SCREEN */
+  .analytics-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px 12px;position:sticky;top:0;z-index:100;}
+  .analytics-header-top{display:flex;align-items:center;gap:12px;margin-bottom:2px;}
+  .analytics-body{padding:16px 16px 80px;max-width:480px;margin:0 auto;}
+  .analytics-section{margin-bottom:24px;}
+  .analytics-section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+  .analytics-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;}
+  /* ユーザー切り替えタブ（分析用） */
+  .an-user-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .an-user-tab{padding:5px 12px;border-radius:99px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,border-color .15s,color .15s;}
+  .an-user-tab.active{background:var(--accent-light);border-color:var(--accent);color:var(--accent);}
+  .an-user-tab.all-tab.active{background:var(--blue-light);border-color:var(--blue);color:var(--blue);}
+  /* ストリークランキング */
+  .rank-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .rank-row:last-child{border-bottom:none;padding-bottom:0;}
+  .rank-num{font-size:16px;font-weight:700;font-family:'DM Mono',monospace;width:28px;text-align:center;flex-shrink:0;color:var(--text3);}
+  .rank-num.gold{color:#C5931A;}
+  .rank-num.silver{color:#888;}
+  .rank-num.bronze{color:#A0612A;}
+  .rank-info{flex:1;min-width:0;}
+  .rank-habit{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rank-user{font-size:11px;color:var(--text3);margin-top:1px;}
+  .rank-streak{font-size:15px;font-weight:700;font-family:'DM Mono',monospace;color:var(--amber);flex-shrink:0;}
+  .rank-streak.high{color:var(--accent-dark);}
+  /* バーグラフ */
+  .bar-chart{display:flex;flex-direction:column;gap:10px;}
+  .bar-chart-row{display:flex;flex-direction:column;gap:3px;}
+  .bar-chart-label{display:flex;justify-content:space-between;align-items:baseline;}
+  .bar-chart-name{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%;}
+  .bar-chart-pct{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;color:var(--text2);flex-shrink:0;}
+  .bar-chart-track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+  .bar-chart-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.22,1,.36,1);}
+  /* 月ナビ */
+  .an-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .an-month-label{font-size:14px;font-weight:700;}
+  .an-month-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+  .an-month-btn:disabled{opacity:.3;cursor:default;}
+  /* ユーザー比較 */
+  .compare-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+  .compare-row:last-child{border-bottom:none;padding-bottom:0;}
+  .compare-name{font-size:13px;font-weight:500;width:56px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .compare-bar-wrap{flex:1;display:flex;flex-direction:column;gap:3px;}
+  .compare-bar-track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+  .compare-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.22,1,.36,1);}
+  .compare-pct{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;width:36px;text-align:right;flex-shrink:0;}
+  .compare-meta{font-size:10px;color:var(--text3);}
+  /* 空状態 */
+  .an-empty{text-align:center;padding:28px 16px;color:var(--text3);font-size:13px;line-height:1.7;}
 </style>
 </head>
 <body>
@@ -310,36 +384,47 @@
   </div>
 </div>
 
+<!-- PULL TO REFRESH INDICATOR -->
+<div class="ptr-indicator" id="ptr-indicator">
+  <div class="ptr-spinner" id="ptr-spinner" style="display:none;"></div>
+  <span id="ptr-label">↓ 引っ張ってリモートから取得</span>
+</div>
+
 <!-- LIST SCREEN -->
 <div class="screen" id="screen-list">
-  <div class="header">
-    <div class="header-top">
-      <div class="app-title">つづ<span>け</span>る</div>
-      <div class="header-right">
-        <div class="sync-dot" id="sync-dot"></div>
-        <button class="menu-btn" id="menu-btn">⋯</button>
-      </div>
-    </div>
-    <div class="date-display" id="date-display"></div>
-    <div class="group-tabs" id="group-tabs"></div>
-    <div class="user-tabs" id="user-tabs"></div>
-  </div>
-  <div class="main">
-    <div class="section-label">今日の進捗</div>
-    <div class="progress-bar-wrap">
-      <div class="progress-row">
-        <span class="progress-label" id="progress-text">0 / 0 完了</span>
-        <span class="progress-count" id="progress-pct">—</span>
-      </div>
-      <div class="bar-track"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
-      <div id="perfect-row" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);align-items:center;gap:8px;">
-        <span style="font-size:18px;">🏅</span>
-        <div>
-          <div id="perfect-msg" style="font-size:13px;font-weight:700;color:var(--check);"></div>
-          <div id="perfect-streak" style="font-size:11px;color:var(--text3);margin-top:1px;"></div>
+  <div class="sticky-top">
+    <div class="header">
+      <div class="header-top">
+        <div class="app-title">つづ<span>け</span>る</div>
+        <div class="header-right">
+          <div class="sync-dot" id="sync-dot"></div>
+          <button class="menu-btn" id="menu-btn">⋯</button>
         </div>
       </div>
+      <div class="date-display" id="date-display"></div>
+      <div class="group-tabs" id="group-tabs"></div>
+      <div class="user-tabs" id="user-tabs"></div>
     </div>
+    <div class="progress-sticky" style="max-width:480px;margin:0 auto;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">今日の進捗</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-row">
+          <span class="progress-label" id="progress-text">0 / 0 完了</span>
+          <span class="progress-count" id="progress-pct">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+        <div id="perfect-row" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);align-items:center;gap:8px;">
+          <span style="font-size:16px;">🏅</span>
+          <div>
+            <div id="perfect-msg" style="font-size:12px;font-weight:700;color:var(--check);"></div>
+            <div id="perfect-streak" style="font-size:11px;color:var(--text3);margin-top:1px;"></div>
+          </div>
+        </div>
+        <div id="goal-comment-area" class="goal-comment-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:6px;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
     <div class="section-label">習慣リスト</div>
     <div class="habit-list" id="habit-list"></div>
   </div>
@@ -426,9 +511,57 @@
   </div>
 </div>
 
+<!-- ANALYTICS SCREEN -->
+<div class="screen" id="screen-analytics">
+  <div class="analytics-header">
+    <div class="analytics-header-top">
+      <button class="back-btn" id="analytics-back-btn">←</button>
+      <div class="cal-habit-name">分析</div>
+    </div>
+  </div>
+  <div class="analytics-body">
+
+    <!-- ① ストリークランキング -->
+    <div class="analytics-section">
+      <div class="analytics-section-title">🔥 連続記録ランキング（毎日習慣）</div>
+      <div class="analytics-card" id="an-streak-card">
+        <div class="an-empty">データがありません</div>
+      </div>
+    </div>
+
+    <!-- ② 月別達成率バーグラフ -->
+    <div class="analytics-section">
+      <div class="analytics-section-title">📊 月別達成率（毎日習慣）</div>
+      <div class="analytics-card">
+        <!-- ユーザー切り替えタブ -->
+        <div class="an-user-tabs" id="an-rate-user-tabs"></div>
+        <!-- 月ナビ -->
+        <div class="an-month-nav">
+          <button class="an-month-btn" id="an-prev-month">‹</button>
+          <div class="an-month-label" id="an-month-label"></div>
+          <button class="an-month-btn" id="an-next-month">›</button>
+        </div>
+        <div class="bar-chart" id="an-rate-chart">
+          <div class="an-empty">データがありません</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ ユーザー間比較 -->
+    <div class="analytics-section" id="an-compare-section">
+      <div class="analytics-section-title">👥 グループ内ユーザー比較（今月・毎日習慣）</div>
+      <div class="analytics-card" id="an-compare-card">
+        <div class="an-empty">データがありません</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- SHEET -->
 <div class="sheet-overlay" id="sheet-overlay">
   <div class="sheet">
+    <div class="sheet-scroll">
     <div class="sheet-handle"></div>
     <div class="sheet-title" id="sheet-user-title">メニュー</div>
     <div class="toggle-row">
@@ -441,6 +574,14 @@
     <button class="sheet-btn" id="sync-setup-btn">
       <div class="btn-icon sync-icon">🔗</div>
       <div><div>グループ・共有の設定</div><div class="btn-desc" id="sync-status-label">未設定（ローカル保存中）</div></div>
+    </button>
+    <button class="sheet-btn" id="force-sync-btn">
+      <div class="btn-icon sync-icon">🔄</div>
+      <div><div>今すぐ同期する</div><div class="btn-desc">リモートから最新データを取得</div></div>
+    </button>
+    <button class="sheet-btn" id="push-sync-btn">
+      <div class="btn-icon" style="background:var(--green-light);">☁️</div>
+      <div><div>リモートを更新する</div><div class="btn-desc">このスマホのデータをリモートに送信</div></div>
     </button>
     <button class="sheet-btn" id="delete-group-btn">
       <div class="btn-icon" style="background:var(--red-light);">🗑️</div>
@@ -464,6 +605,10 @@
       <div class="btn-icon archive">🗂️</div>
       <div><div>削除した習慣 <span id="archive-badge" style="display:none;background:var(--accent);color:white;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:4px;"></span></div><div class="btn-desc">アーカイブから復元できます</div></div>
     </button>
+    <button class="sheet-btn" id="analytics-btn">
+      <div class="btn-icon" style="background:var(--blue-light);">📈</div>
+      <div><div>習慣の分析</div><div class="btn-desc">ストリーク・達成率・ユーザー比較</div></div>
+    </button>
     <button class="sheet-btn" id="deleted-users-btn">
       <div class="btn-icon" style="background:var(--amber-light);">👤</div>
       <div><div>削除したユーザー <span id="deleted-users-badge" style="display:none;background:var(--amber);color:white;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:4px;"></span></div><div class="btn-desc">一時削除したユーザーを復元できます</div></div>
@@ -480,7 +625,10 @@
       <div class="btn-icon import">📥</div>
       <div><div>インポート</div><div class="btn-desc">バックアップファイルからデータを復元</div></div>
     </button>
+    </div><!-- /sheet-scroll -->
+    <div class="sheet-footer">
     <button class="sheet-close" id="sheet-close">閉じる</button>
+    </div><!-- /sheet-footer -->
   </div>
 </div>
 
@@ -491,9 +639,6 @@
 <script>
 // ── CONSTANTS ──
 const LOCAL_KEY='tsuzukeru_v3';
-
-// ── ID生成 ──
-function generateId(prefix='id'){return prefix+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);}
 const GROUPS_KEY='tsuzukeru_groups';   // [{id,name,gasUrl}]
 const CURRENT_GROUP_KEY='tsuzukeru_current_group';
 const PINNED_KEY='tsuzukeru_pinned_user';
@@ -504,7 +649,7 @@ function localDateStr(d){const dt=d||new Date();return dt.getFullYear()+'-'+Stri
 function localDateOffset(n){const d=new Date();d.setDate(d.getDate()-n);return localDateStr(d);}
 const TODAY=localDateStr();
 
-let calHabitId=null,calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
+let calHabitIdx=0,calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let confettiActive=false;
 let addType='daily'; // 現在の追加種別
 
@@ -557,11 +702,9 @@ function loadLocal(){try{return JSON.parse(localStorage.getItem(groupDataKey()))
 function saveLocal(d){localStorage.setItem(groupDataKey(),JSON.stringify(d));}
 
 function migrateHabit(h){
-  if(!h.id)h.id=generateId('h');
+  // type フィールドのマイグレーション
   if(!h.type){h.type=h.bonus?'occasional':'daily';}
   delete h.bonus;
-  if(!h.logs)h.logs={};
-  if(!h.updatedAt)h.updatedAt=0;
   return h;
 }
 
@@ -615,7 +758,15 @@ async function syncFromRemote(silent=false){
   // ローカルを正として、リモートにしかいないユーザーだけ追加する
   // （ローカルの最新チェック・追加データを絶対に失わない）
   const merged={...local};
+  // deletedUsersはローカルとリモートをマージ（両方のを保持）
+  const remoteDeleted=remote.deletedUsers||[];
+  const localDeleted=(merged.deletedUsers||[]).slice();
+  remoteDeleted.forEach(ru=>{if(!localDeleted.find(u=>u.id===ru.id))localDeleted.push(ru);});
+  merged.deletedUsers=localDeleted;
+
   (remote.users||[]).forEach(ru=>{
+    // ローカルで削除済みのユーザーはスキップ（復活させない）
+    if(merged.deletedUsers.find(u=>u.id===ru.id))return;
     const lu=merged.users.find(u=>u.id===ru.id);
     if(!lu){
       // リモートにしかいないユーザーはそのまま追加
@@ -624,27 +775,32 @@ async function syncFromRemote(silent=false){
       merged.users.push(ru);
     }else{
       // 同じユーザーはログをマージ（どちらかにあれば残す、削除はローカル優先）
+      const deletedKeys=lu.deletedHabitKeys||[];
       (ru.habits||[]).forEach(rh=>{
         const lh=lu.habits.find(h=>h.name===rh.name&&h.type===rh.type);
         if(lh){
           // リモートのログをローカルにマージ（ローカルにないキーだけ追加）
           Object.keys(rh.logs||{}).forEach(k=>{if(!(k in (lh.logs||{})))lh.logs[k]=rh.logs[k];});
+        }else{
+          // ローカルに存在しない習慣：削除済みリストにない場合のみ追加
+          const rhKey=(rh.createdAt||'')+'::'+(rh.name||'');
+          if(!deletedKeys.includes(rhKey)){lu.habits.push(migrateHabit({...rh}));}
         }
-        // ローカルにない習慣は追加しない（ローカルで削除済みかもしれないため）
+      });
+      // goal タイプのテキスト更新をリモートから反映（updatedAt が新しい方を優先）
+      (ru.habits||[]).filter(rh=>rh.type==='goal').forEach(rh=>{
+        const lh=lu.habits.find(h=>h.type==='goal'&&h.createdAt===rh.createdAt);
+        if(lh&&rh.updatedAt&&(!lh.updatedAt||rh.updatedAt>lh.updatedAt)){lh.name=rh.name;lh.updatedAt=rh.updatedAt;}
       });
     }
   });
-  // deletedUsersはローカルとリモートをマージ（両方のを保持）
-  const remoteDeleted=remote.deletedUsers||[];
-  const localDeleted=merged.deletedUsers||[];
-  remoteDeleted.forEach(ru=>{if(!localDeleted.find(u=>u.id===ru.id))localDeleted.push(ru);});
-  merged.deletedUsers=localDeleted;
 
-  // グループ名をリモートから反映
+  // グループ名をリモートから反映（現在のグループにGAS連携がある場合のみ）
   if(remote.groupName){
     const groups=loadGroups();const id=getCurrentGroupId();
     const g=groups.find(g=>g.id===id);
-    if(g&&remote.groupName!==g.name){g.name=remote.groupName;saveGroups(groups);}
+    // GAS連携が設定されているグループのみ名前を更新する
+    if(g&&g.gasUrl&&remote.groupName!==g.name){g.name=remote.groupName;saveGroups(groups);}
   }
   setCache(merged);
   // ピンが有効かチェック
@@ -803,9 +959,18 @@ async function renderWelcomeStep2(group){
       }
       const local=getCache();
       const merged={...remote};
-      local.users.forEach(lu=>{if(!merged.users.find(ru=>ru.id===lu.id))merged.users.push(lu);});
+      // deletedUsersをマージ（ローカル＋リモート両方を保持）
+      const mergedDeleted=[...(local.deletedUsers||[])];
+      (remote.deletedUsers||[]).forEach(ru=>{if(!mergedDeleted.find(u=>u.id===ru.id))mergedDeleted.push(ru);});
+      merged.deletedUsers=mergedDeleted;
+      // リモートから来たusersのうち削除済みのものを除外
+      merged.users=(merged.users||[]).filter(ru=>!mergedDeleted.find(u=>u.id===ru.id));
+      // ローカルにしかいないユーザーを追加（削除済みは除く）
+      local.users.forEach(lu=>{
+        if(!merged.users.find(ru=>ru.id===lu.id)&&!mergedDeleted.find(u=>u.id===lu.id))merged.users.push(lu);
+      });
       merged.currentUserId=local.currentUserId;
-      if(!merged.users.find(u=>u.id===merged.currentUserId))merged.currentUserId=merged.users[0].id;
+      if(!merged.users.find(u=>u.id===merged.currentUserId))merged.currentUserId=merged.users[0]?.id||'';
       (merged.users||[]).forEach(u=>{u.habits=(u.habits||[]).map(migrateHabit);u.archive=(u.archive||[]).map(migrateHabit);});
       setCache(merged);setSyncDot('ok');
     }else{setSyncDot('err');}
@@ -889,13 +1054,132 @@ function renderUserTabs(){
   const all=getCache();const tabs=document.getElementById('user-tabs');tabs.innerHTML='';
   const parent=isParentMode();const pinnedId=getPinnedUserId();
   const visibleUsers=parent?all.users:all.users.filter(u=>u.id===pinnedId);
+
+  // ── ドラッグ状態管理 ──
+  let dragSrcId=null,ghost=null,isDragging=false;
+  let startX=0,startY=0,dragOffX=0,dragOffY=0;
+  let longPressTimer=null;
+
+  function moveGhost(x,y){if(ghost){ghost.style.left=(x-dragOffX)+'px';ghost.style.top=(y-dragOffY)+'px';}}
+
+  function getTargetUid(x,y){
+    if(ghost)ghost.style.display='none';
+    const el=document.elementFromPoint(x,y);
+    if(ghost)ghost.style.display='';
+    const btn=el&&el.closest('[data-uid]');
+    return btn?btn.dataset.uid:null;
+  }
+
+  function commitDrag(x,y){
+    const tgtId=getTargetUid(x,y);
+    if(ghost){ghost.remove();ghost=null;}
+    tabs.querySelectorAll('.drag-dragging,.drag-over').forEach(el=>el.classList.remove('drag-dragging','drag-over'));
+    document.body.style.cursor='';
+    if(tgtId&&tgtId!==dragSrcId){
+      const a=getCache();const users=a.users;
+      const si=users.findIndex(u=>u.id===dragSrcId),ti=users.findIndex(u=>u.id===tgtId);
+      if(si>=0&&ti>=0){const[m]=users.splice(si,1);users.splice(ti,0,m);setCache(a);saveData();}
+      renderUserTabs();render();
+      showToast('✅ 並び順を変更しました');
+    }
+    isDragging=false;dragSrcId=null;
+  }
+
+  function startDragVisual(btn,x,y){
+    isDragging=true;
+    const rect=btn.getBoundingClientRect();
+    dragOffX=x-rect.left;dragOffY=y-rect.top;
+    btn.classList.add('drag-dragging');
+    ghost=document.createElement('div');
+    ghost.className='user-tab-ghost';
+    ghost.textContent=btn.textContent;
+    document.body.appendChild(ghost);
+    moveGhost(x,y);
+  }
+
   visibleUsers.forEach(u=>{
     const btn=document.createElement('button');
     btn.className='user-tab'+(u.id===all.currentUserId?' active':'');
+    btn.dataset.uid=u.id;
     btn.textContent=u.name;
-    btn.addEventListener('click',()=>{const a=getCache();a.currentUserId=u.id;setCache(a);renderUserTabs();render();});
+
+    // ── タッチ（長押し400ms→ドラッグ）──
+    btn.addEventListener('touchstart',e=>{
+      startX=e.touches[0].clientX;startY=e.touches[0].clientY;
+      dragSrcId=u.id;isDragging=false;
+      longPressTimer=setTimeout(()=>{
+        startDragVisual(btn,startX,startY);
+        if(navigator.vibrate)navigator.vibrate(40);
+      },400);
+    },{passive:true});
+
+    btn.addEventListener('touchmove',e=>{
+      const cx=e.touches[0].clientX,cy=e.touches[0].clientY;
+      if(!isDragging){
+        if(Math.abs(cx-startX)>6||Math.abs(cy-startY)>6){clearTimeout(longPressTimer);longPressTimer=null;dragSrcId=null;}
+        return;
+      }
+      e.preventDefault();
+      moveGhost(cx,cy);
+      tabs.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+      const tgtId=getTargetUid(cx,cy);
+      if(tgtId&&tgtId!==dragSrcId){const t=tabs.querySelector(`[data-uid="${tgtId}"]`);if(t)t.classList.add('drag-over');}
+    },{passive:false});
+
+    btn.addEventListener('touchend',e=>{
+      clearTimeout(longPressTimer);longPressTimer=null;
+      if(!isDragging){
+        // 短タップ → ユーザー切り替え
+        const a=getCache();a.currentUserId=u.id;setCache(a);renderUserTabs();render();
+        return;
+      }
+      const t=e.changedTouches[0];commitDrag(t.clientX,t.clientY);
+    },{passive:true});
+
+    btn.addEventListener('touchcancel',()=>{
+      clearTimeout(longPressTimer);longPressTimer=null;
+      if(ghost){ghost.remove();ghost=null;}
+      tabs.querySelectorAll('.drag-dragging,.drag-over').forEach(el=>el.classList.remove('drag-dragging','drag-over'));
+      isDragging=false;dragSrcId=null;
+    },{passive:true});
+
+    // ── マウス（長押し300ms→ドラッグ）──
+    btn.addEventListener('mousedown',e=>{
+      if(e.button!==0)return;
+      startX=e.clientX;startY=e.clientY;dragSrcId=u.id;isDragging=false;
+      longPressTimer=setTimeout(()=>{
+        startDragVisual(btn,e.clientX,e.clientY);
+        document.body.style.cursor='grabbing';
+      },300);
+    });
+
+    btn.addEventListener('click',e=>{
+      if(isDragging){e.preventDefault();return;}
+      clearTimeout(longPressTimer);longPressTimer=null;
+      const a=getCache();a.currentUserId=u.id;setCache(a);renderUserTabs();render();
+    });
+
     tabs.appendChild(btn);
   });
+
+  // マウスのムーブ・アップはdocumentで捕捉
+  const onMove=e=>{
+    if(!isDragging)return;
+    moveGhost(e.clientX,e.clientY);
+    tabs.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+    const tgtId=getTargetUid(e.clientX,e.clientY);
+    if(tgtId&&tgtId!==dragSrcId){const t=tabs.querySelector(`[data-uid="${tgtId}"]`);if(t)t.classList.add('drag-over');}
+  };
+  const onUp=e=>{
+    clearTimeout(longPressTimer);longPressTimer=null;
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    if(!isDragging){isDragging=false;dragSrcId=null;document.body.style.cursor='';return;}
+    commitDrag(e.clientX,e.clientY);
+  };
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+
   // ＋ユーザー追加ボタンは親モードのみ表示
   if(parent){
     const addBtn=document.createElement('button');
@@ -962,15 +1246,15 @@ function showAddGroupForm(){
 }
 
 // ── ADD TYPE TOGGLE ──
-const TYPE_CYCLE=['daily','occasional','quit'];
-const TYPE_LABEL={'daily':'毎日','occasional':'ときどき','quit':'やめる！'};
+const TYPE_CYCLE=['daily','occasional','quit','goal'];
+const TYPE_LABEL={'daily':'毎日','occasional':'ときどき','quit':'やめる！','goal':'目標'};
 document.getElementById('add-type-btn').addEventListener('click',()=>{
   const cur=TYPE_CYCLE.indexOf(addType);
   addType=TYPE_CYCLE[(cur+1)%TYPE_CYCLE.length];
   const btn=document.getElementById('add-type-btn');
   btn.textContent=TYPE_LABEL[addType];
-  btn.className='add-type-btn'+(addType==='occasional'?' mode-occasional':addType==='quit'?' mode-quit':'');
-  const placeholders={'daily':'新しい習慣を追加…','occasional':'ときどき習慣を追加（進捗に影響しない）…','quit':'やめたい習慣を入力… チェック＝今日は我慢できた'};
+  btn.className='add-type-btn'+(addType==='occasional'?' mode-occasional':addType==='quit'?' mode-quit':addType==='goal'?' mode-goal':'');
+  const placeholders={'daily':'新しい習慣を追加…','occasional':'ときどき習慣を追加（進捗に影響しない）…','quit':'やめたい習慣を入力… チェック＝今日は我慢できた','goal':'目標・親からのコメントを入力…'};
   document.getElementById('add-input').placeholder=placeholders[addType];
 });
 
@@ -996,11 +1280,70 @@ function render(){
     if(!perfectRow.dataset.wasComplete)launchConfetti();
     perfectRow.dataset.wasComplete='1';
   }else{perfectRow.style.display='none';perfectRow.dataset.wasComplete='';}
+
+  // 目標コメント表示
+  const goalHabits=habits.filter(h=>h.type==='goal');
+  const goalArea=document.getElementById('goal-comment-area');
+  if(goalHabits.length){
+    goalArea.style.display='block';
+    goalArea.innerHTML=goalHabits.map((h,gi)=>{
+      const actualIdx=habits.indexOf(h);
+      return`<div class="goal-comment-item" data-idx="${actualIdx}">
+        <span style="font-size:11px;flex-shrink:0;">🎯</span>
+        <span class="goal-comment-text">${escHtml(h.name)}</span>
+        <button class="goal-comment-btn goal-edit-btn" data-idx="${actualIdx}" title="編集">✏️</button>
+        <button class="goal-comment-btn goal-del-btn" data-idx="${actualIdx}" title="削除">✕</button>
+      </div>`;
+    }).join('');
+    // 編集
+    goalArea.querySelectorAll('.goal-edit-btn').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        e.stopPropagation();
+        const idx=parseInt(btn.dataset.idx);
+        const habit=habits[idx];
+        const item=btn.closest('.goal-comment-item');
+        item.innerHTML=`
+          <span style="font-size:11px;flex-shrink:0;">🎯</span>
+          <input type="text" value="${escHtml(habit.name)}" style="flex:1;height:24px;border:1.5px solid var(--blue);border-radius:6px;padding:0 6px;font-family:'Noto Sans JP',sans-serif;font-size:12px;color:var(--text);background:white;outline:none;min-width:0;">
+          <button class="goal-comment-btn goal-save-btn" title="保存" style="opacity:1;color:var(--check);">✓</button>
+          <button class="goal-comment-btn goal-cancel-btn" title="取消">✕</button>`;
+        const inp=item.querySelector('input');inp.focus();inp.select();
+        const doSave=async()=>{
+          const v=inp.value.trim();if(!v)return render();
+          const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
+          u.habits[idx].name=v;u.habits[idx].updatedAt=TODAY;setCache(a);await saveData();render();
+        };
+        item.querySelector('.goal-save-btn').addEventListener('click',e2=>{e2.stopPropagation();doSave();});
+        item.querySelector('.goal-cancel-btn').addEventListener('click',e2=>{e2.stopPropagation();render();});
+        inp.addEventListener('keydown',e2=>{if(e2.key==='Enter')doSave();if(e2.key==='Escape')render();});
+        inp.addEventListener('click',e2=>e2.stopPropagation());
+      });
+    });
+    // 削除
+    goalArea.querySelectorAll('.goal-del-btn').forEach(btn=>{
+      btn.addEventListener('click',async e=>{
+        e.stopPropagation();
+        const idx=parseInt(btn.dataset.idx);
+        const a=getCache();const u=a.users.find(uu=>uu.id===a.currentUserId);
+        const habit=JSON.parse(JSON.stringify(u.habits[idx]));
+        habit.deletedAt=TODAY;if(!u.archive)u.archive=[];
+        u.archive.unshift(habit);u.habits.splice(idx,1);
+        // 削除済み習慣キーを記録（同期時に再追加されないようにする）
+        const hkey=(habit.createdAt||'')+'::'+(habit.name||'');
+        if(!u.deletedHabitKeys)u.deletedHabitKeys=[];
+        if(!u.deletedHabitKeys.includes(hkey))u.deletedHabitKeys.push(hkey);
+        setCache(a);render();await saveData();showToast(`「${habit.name}」を削除しました`);
+      });
+    });
+  }else{
+    goalArea.style.display='none';goalArea.innerHTML='';
+  }
   const {archive}=getUserData();
   const badge=document.getElementById('archive-badge');
   if(badge){badge.textContent=archive.length;badge.style.display=archive.length>0?'inline':'none';}
   const list=document.getElementById('habit-list');
-  if(!habits.length){
+  const nonGoalHabits=habits.filter(h=>h.type!=='goal');
+  if(!nonGoalHabits.length){
     list.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">まだ習慣がありません<br>下のフォームから追加してください</div></div>`;
     return;
   }
@@ -1008,6 +1351,8 @@ function render(){
 
   habits.forEach(habit=>{
     const idx=habits.indexOf(habit);
+    // goal タイプは進捗エリアに表示するため、習慣リストには表示しない
+    if(habit.type==='goal')return;
     const checkedToday=!!(habit.logs||{})[TODAY];
     const type=habit.type||'daily';
     const isQuit=type==='quit';
@@ -1061,7 +1406,7 @@ function render(){
 
     const card=document.createElement('div');
     card.className=cardClass;
-    card.dataset.habitId=habit.id;
+    card.dataset.habitIdx=idx;
     card.innerHTML=`
       <div class="card-top">
         <div class="drag-handle" title="ドラッグして並び替え">⠿</div>
@@ -1070,9 +1415,9 @@ function render(){
           <span class="habit-name">${escHtml(habit.name)}${tagHtml}</span>
         </div>
         <div class="card-actions">
-          <button class="act-btn del" data-hid="${habit.id}" title="削除">✕</button>
-          <button class="act-btn edit" data-hid="${habit.id}" title="編集">✏️</button>
-          <button class="act-btn cal" data-hid="${habit.id}" title="カレンダー">📅</button>
+          <button class="act-btn del" data-idx="${idx}" title="削除">✕</button>
+          <button class="act-btn edit" data-idx="${idx}" title="編集">✏️</button>
+          <button class="act-btn cal" data-idx="${idx}" title="カレンダー">📅</button>
         </div>
       </div>
       <div class="card-bottom">
@@ -1082,15 +1427,12 @@ function render(){
         ${milestone?`<span class="milestone">${milestone}</span>`:''}
       </div>`;
 
-    // チェック（idベース）
+    // チェック
     card.addEventListener('click',async(e)=>{
       if(e.target.closest('.act-btn')||e.target.closest('.rename-form')||e.target.closest('.drag-handle'))return;
-      const habitId=card.dataset.habitId;
       const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
-      const h=u.habits.find(h=>h.id===habitId);if(!h)return;
-      if(!h.logs)h.logs={};
+      const h=u.habits[idx];if(!h.logs)h.logs={};
       h.logs[TODAY]?delete h.logs[TODAY]:(h.logs[TODAY]=true);
-      h.updatedAt=Date.now();
       setCache(a);render();await saveData();
     });
 
@@ -1101,15 +1443,15 @@ function render(){
     list.appendChild(card);
   });
 
-  // カレンダーボタン（idベース）
-  list.querySelectorAll('.act-btn.cal').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(btn.dataset.hid);}));
+  // カレンダーボタン
+  list.querySelectorAll('.act-btn.cal').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(parseInt(btn.dataset.idx));}));
 
-  // 編集ボタン（idベース）
+  // 編集ボタン
   list.querySelectorAll('.act-btn.edit').forEach(btn=>{
     btn.addEventListener('click',(e)=>{
-      e.stopPropagation();const habitId=btn.dataset.hid;
+      e.stopPropagation();const idx=parseInt(btn.dataset.idx);
       const card=btn.closest('.habit-card');
-      const habit=getUserData().habits.find(h=>h.id===habitId);if(!habit)return;
+      const habit=getUserData().habits[idx];
       const currentName=habit.name;
       const currentType=habit.type||'daily';
       card.querySelector('.card-bottom').style.display='none';
@@ -1146,8 +1488,7 @@ function render(){
       const doSave=async()=>{
         const newName=input.value.trim();if(!newName)return render();
         const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
-        const h=u.habits.find(h=>h.id===habitId);if(!h)return render();
-        h.name=newName;h.type=editType;h.updatedAt=Date.now();
+        u.habits[idx].name=newName;u.habits[idx].type=editType;
         setCache(a);await saveData();showToast(`✅「${newName}」を保存しました`);render();
       };
       form.querySelector('.rename-ok').addEventListener('click',e2=>{e2.stopPropagation();doSave();});
@@ -1158,15 +1499,18 @@ function render(){
     });
   });
 
-  // 削除ボタン（idベース）
+  // 削除ボタン
   list.querySelectorAll('.act-btn.del').forEach(btn=>{
     btn.addEventListener('click',async(e)=>{
-      e.stopPropagation();const habitId=btn.dataset.hid;
+      e.stopPropagation();const idx=parseInt(btn.dataset.idx);
       const a=getCache();const u=a.users.find(uu=>uu.id===a.currentUserId);
-      const idx=u.habits.findIndex(h=>h.id===habitId);if(idx===-1)return;
       const habit=JSON.parse(JSON.stringify(u.habits[idx]));
       habit.deletedAt=TODAY;if(!u.archive)u.archive=[];
       u.archive.unshift(habit);u.habits.splice(idx,1);
+      // 削除済み習慣キーを記録（同期時に再追加されないようにする）
+      const hkey=(habit.createdAt||'')+'::'+(habit.name||'');
+      if(!u.deletedHabitKeys)u.deletedHabitKeys=[];
+      if(!u.deletedHabitKeys.includes(hkey))u.deletedHabitKeys.push(hkey);
       setCache(a);render();await saveData();showToast(`「${habit.name}」をアーカイブしました`);
     });
   });
@@ -1196,11 +1540,8 @@ function initDrag(handle,card,list){
     const tc=list.querySelector('.habit-card.drag-over-top,.habit-card.drag-over-bottom');
     if(!tc||tc===dragCard){list.querySelectorAll('.habit-card').forEach(c=>c.classList.remove('drag-over-top','drag-over-bottom'));dragCard=null;return;}
     const before=tc.classList.contains('drag-over-top');tc.classList.remove('drag-over-top','drag-over-bottom');
-    const fromId=dragCard.dataset.habitId,toId=tc.dataset.habitId;
+    const from=parseInt(dragCard.dataset.habitIdx),to=parseInt(tc.dataset.habitIdx);
     const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
-    const from=u.habits.findIndex(h=>h.id===fromId);
-    const to=u.habits.findIndex(h=>h.id===toId);
-    if(from===-1||to===-1){dragCard=null;return;}
     const[moved]=u.habits.splice(from,1);
     let at=to>from?to-1:to;if(!before)at++;
     at=Math.max(0,Math.min(at,u.habits.length));
@@ -1213,9 +1554,9 @@ function initDrag(handle,card,list){
 }
 
 // ── CALENDAR ──
-function openCalendar(habitId){calHabitId=habitId;calYear=new Date().getFullYear();calMonth=new Date().getMonth();renderCalendar();showScreen('screen-cal');}
+function openCalendar(idx){calHabitIdx=idx;calYear=new Date().getFullYear();calMonth=new Date().getMonth();renderCalendar();showScreen('screen-cal');}
 function renderCalendar(){
-  const {habits}=getUserData();const habit=habits.find(h=>h.id===calHabitId);if(!habit){showScreen('screen-list');return;}
+  const {habits}=getUserData();const habit=habits[calHabitIdx];if(!habit){showScreen('screen-list');return;}
   const type=habit.type||'daily';const isQuit=type==='quit';const isOccasional=type==='occasional';
 
   const typeLabels={'daily':'','occasional':' (ときどき)','quit':' (やめる！)'};
@@ -1290,9 +1631,8 @@ function renderCalendar(){
     cell.className=cls;cell.textContent=d;
     if(!isFuture)cell.addEventListener('click',async()=>{
       const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
-      const h=u.habits.find(h=>h.id===calHabitId);if(!h){return;}if(!h.logs)h.logs={};
+      const h=u.habits[calHabitIdx];if(!h.logs)h.logs={};
       const was=!!h.logs[k];was?delete h.logs[k]:(h.logs[k]=true);
-      h.updatedAt=Date.now();
       setCache(a);
       const lbl=isToday?'今日':`${calMonth+1}月${d}日`;
       const msg=isQuit?(was?`${lbl} — 記録を消しました`:`${lbl} — 我慢できた！ ✓`):(was?`${lbl} — 取り消しました`:`${lbl} — 記録しました ✓`);
@@ -1309,7 +1649,7 @@ document.getElementById('back-btn').addEventListener('click',()=>{showScreen('sc
 async function addHabit(){
   const input=document.getElementById('add-input'),name=input.value.trim();if(!name)return;
   const a=getCache();const u=a.users.find(u=>u.id===a.currentUserId);
-  u.habits.push({id:generateId('h'),name,logs:{},createdAt:TODAY,type:addType,updatedAt:Date.now()});setCache(a);input.value='';render();
+  u.habits.push({name,logs:{},createdAt:TODAY,type:addType});setCache(a);input.value='';render();
   await saveData();
   setTimeout(()=>document.getElementById('habit-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
@@ -1337,6 +1677,83 @@ function renderArchive(){
   }));
 }
 document.getElementById('archive-back-btn').addEventListener('click',()=>{showScreen('screen-list');render();});
+
+// ── FORCE SYNC（リモートから取得）──
+document.getElementById('force-sync-btn').addEventListener('click',async()=>{
+  overlay.classList.remove('open');
+  if(!getGasUrl()){showToast('❌ 共有設定がされていません');return;}
+  setSyncDot('syncing');
+  await syncFromRemote();
+  showToast('✅ リモートから取得しました');
+});
+
+// ── PUSH SYNC（ローカル→リモートに送信）──
+document.getElementById('push-sync-btn').addEventListener('click',async()=>{
+  overlay.classList.remove('open');
+  if(!getGasUrl()){showToast('❌ 共有設定がされていません');return;}
+  setSyncDot('syncing');
+  try{
+    const cg=getCurrentGroup();
+    const all=getCache();
+    const dataToSave=cg?{...all,groupName:cg.name}:all;
+    const ok=await remoteSave(dataToSave);
+    if(ok){setSyncDot('ok');showToast('✅ リモートを更新しました');}
+    else{setSyncDot('err');showToast('❌ 送信に失敗しました');}
+  }catch{setSyncDot('err');showToast('❌ 送信に失敗しました');}
+});
+
+// ── PULL-TO-REFRESH ──
+(function(){
+  let startY=0,pulling=false,triggered=false;
+  const THRESHOLD=72;
+  const indicator=document.getElementById('ptr-indicator');
+  const ptrLabel=document.getElementById('ptr-label');
+  const ptrSpinner=document.getElementById('ptr-spinner');
+
+  function getScreenList(){return document.getElementById('screen-list');}
+
+  document.addEventListener('touchstart',e=>{
+    const sl=getScreenList();
+    if(!sl.classList.contains('active'))return;
+    if(window.scrollY>0)return; // 最上部のときだけ有効
+    startY=e.touches[0].clientY;pulling=true;triggered=false;
+  },{passive:true});
+
+  document.addEventListener('touchmove',e=>{
+    if(!pulling)return;
+    const sl=getScreenList();
+    if(!sl.classList.contains('active'))return;
+    if(window.scrollY>0){pulling=false;indicator.classList.remove('visible');return;}
+    const dy=e.touches[0].clientY-startY;
+    if(dy<=0){indicator.classList.remove('visible');return;}
+    const progress=Math.min(dy/THRESHOLD,1);
+    indicator.classList.add('visible');
+    if(dy>=THRESHOLD&&!triggered){
+      ptrLabel.textContent='放すと同期します ↑';
+    }else if(dy<THRESHOLD){
+      ptrLabel.textContent='↓ 引っ張ってリモートから取得';
+    }
+  },{passive:true});
+
+  document.addEventListener('touchend',async e=>{
+    if(!pulling)return;pulling=false;
+    const sl=getScreenList();
+    if(!sl.classList.contains('active')){indicator.classList.remove('visible');return;}
+    const dy=e.changedTouches[0].clientY-startY;
+    if(dy<THRESHOLD){indicator.classList.remove('visible');return;}
+    if(!getGasUrl()){indicator.classList.remove('visible');showToast('❌ 共有設定がされていません');return;}
+    // 同期実行
+    ptrLabel.textContent='同期中…';ptrSpinner.style.display='block';
+    setSyncDot('syncing');
+    await syncFromRemote();
+    ptrSpinner.style.display='none';
+    ptrLabel.textContent='✅ 取得完了';
+    setTimeout(()=>{
+      indicator.classList.remove('visible');
+      ptrLabel.textContent='↓ 引っ張ってリモートから取得';
+    },900);
+  },{passive:true});
+})();
 
 // ── SYNC SETUP ──
 document.getElementById('setup-back-btn').addEventListener('click',()=>showScreen('screen-list'));
@@ -1373,9 +1790,18 @@ document.getElementById('setup-save-btn').addEventListener('click',async()=>{
         const g=groups.find(g=>g.id===id);
         if(g&&data.groupName!==g.name){g.name=data.groupName;saveGroups(groups);}
       }
-      local.users.forEach(lu=>{if(!merged.users.find(ru=>ru.id===lu.id))merged.users.push(lu);});
+      // deletedUsersをマージ（ローカル＋リモート両方を保持）
+      const mergedDeleted=[...(local.deletedUsers||[])];
+      (data.deletedUsers||[]).forEach(ru=>{if(!mergedDeleted.find(u=>u.id===ru.id))mergedDeleted.push(ru);});
+      merged.deletedUsers=mergedDeleted;
+      // リモートから来たusersのうち削除済みのものを除外
+      merged.users=(merged.users||[]).filter(ru=>!mergedDeleted.find(u=>u.id===ru.id));
+      // ローカルにしかいないユーザーを追加（削除済みは除く）
+      local.users.forEach(lu=>{
+        if(!merged.users.find(ru=>ru.id===lu.id)&&!mergedDeleted.find(u=>u.id===lu.id))merged.users.push(lu);
+      });
       merged.currentUserId=local.currentUserId;
-      if(!merged.users.find(u=>u.id===merged.currentUserId))merged.currentUserId=merged.users[0].id;
+      if(!merged.users.find(u=>u.id===merged.currentUserId))merged.currentUserId=merged.users[0]?.id||'';
       (merged.users||[]).forEach(u=>{u.habits=(u.habits||[]).map(migrateHabit);u.archive=(u.archive||[]).map(migrateHabit);});
       setCache(merged);
     }else{await remoteSave(getCache());}
@@ -1528,6 +1954,185 @@ document.getElementById('delete-user-btn').addEventListener('click',()=>{
   ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
 });
 document.getElementById('archive-btn').addEventListener('click',()=>{overlay.classList.remove('open');renderArchive();showScreen('screen-archive');});
+document.getElementById('analytics-btn').addEventListener('click',()=>{overlay.classList.remove('open');openAnalytics();});
+
+// ── ANALYTICS ──
+let anYear=new Date().getFullYear();
+let anMonth=new Date().getMonth();
+let anRateUserId=null; // null = 自分
+
+// バーの色パレット（ユーザーごとに割り当て）
+const AN_COLORS=['#D85A30','#185FA5','#3B6D11','#534AB7','#BA7517','#A32D2D','#639922'];
+function anColor(idx){return AN_COLORS[idx%AN_COLORS.length];}
+
+function openAnalytics(){
+  const all=getCache();
+  anRateUserId=all.currentUserId;
+  anYear=new Date().getFullYear();
+  anMonth=new Date().getMonth();
+  renderAnalytics();
+  showScreen('screen-analytics');
+}
+
+function renderAnalytics(){
+  renderAnStreak();
+  renderAnRateUserTabs();
+  renderAnRate();
+  renderAnCompare();
+}
+
+// ① ストリークランキング（グループ全員の毎日習慣）
+function renderAnStreak(){
+  const all=getCache();
+  const card=document.getElementById('an-streak-card');
+  // 全ユーザーの毎日習慣を集めてストリーク順にソート
+  const entries=[];
+  all.users.forEach((u,ui)=>{
+    (u.habits||[]).filter(h=>(h.type||'daily')==='daily').forEach(h=>{
+      const s=getStreak(h);
+      entries.push({userName:u.name,habitName:h.name,streak:s,userIdx:ui,isMe:u.id===all.currentUserId});
+    });
+  });
+  entries.sort((a,b)=>b.streak-a.streak);
+  const top=entries.slice(0,10);
+  if(!top.length){card.innerHTML='<div class="an-empty">毎日習慣がまだありません</div>';return;}
+  const rankNums=['🥇','🥈','🥉'];
+  card.innerHTML=top.map((e,i)=>{
+    const numHtml=i<3
+      ?`<div class="rank-num" style="font-size:20px;">${rankNums[i]}</div>`
+      :`<div class="rank-num">${i+1}</div>`;
+    const streakClass=e.streak>=30?'high':'';
+    const meLabel=e.isMe?'<span style="font-size:10px;background:var(--accent-light);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;">自分</span>':'';
+    const userLabel=all.users.length>1?`<div class="rank-user">${escHtml(e.userName)}${meLabel}</div>`:(meLabel?`<div class="rank-user">${meLabel}</div>`:'');
+    return`<div class="rank-row">
+      ${numHtml}
+      <div class="rank-info">
+        <div class="rank-habit">${escHtml(e.habitName)}</div>
+        ${userLabel}
+      </div>
+      <div class="rank-streak ${streakClass}">${e.streak}<span style="font-size:11px;font-weight:400;color:var(--text3);font-family:'Noto Sans JP',sans-serif;"> 日</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ② 月別達成率バーグラフ — ユーザー切り替えタブ
+function renderAnRateUserTabs(){
+  const all=getCache();
+  const wrap=document.getElementById('an-rate-user-tabs');
+  if(all.users.length<=1){wrap.style.display='none';return;}
+  wrap.style.display='flex';
+  wrap.innerHTML='';
+  all.users.forEach(u=>{
+    const btn=document.createElement('button');
+    btn.className='an-user-tab'+(u.id===anRateUserId?' active':'');
+    btn.textContent=u.name;
+    btn.addEventListener('click',()=>{anRateUserId=u.id;renderAnRateUserTabs();renderAnRate();});
+    wrap.appendChild(btn);
+  });
+}
+
+// ② 月別達成率バーグラフ — チャート本体
+function renderAnRate(){
+  const all=getCache();
+  const user=all.users.find(u=>u.id===anRateUserId)||all.users[0];
+  const now=new Date();
+  document.getElementById('an-month-label').textContent=`${anYear}年${anMonth+1}月`;
+  document.getElementById('an-next-month').disabled=anYear===now.getFullYear()&&anMonth===now.getMonth();
+
+  const habits=(user.habits||[]).filter(h=>(h.type||'daily')==='daily');
+  const chart=document.getElementById('an-rate-chart');
+  if(!habits.length){chart.innerHTML='<div class="an-empty">毎日習慣がまだありません</div>';return;}
+
+  const dim=new Date(anYear,anMonth+1,0).getDate();
+  const isCurrentMonth=anYear===now.getFullYear()&&anMonth===now.getMonth();
+  const elapsed=isCurrentMonth?now.getDate():dim;
+
+  chart.innerHTML='';
+  habits.forEach((h,hi)=>{
+    let done=0;
+    for(let d=1;d<=elapsed;d++){
+      const k=dateKey(anYear,anMonth,d);
+      if((h.logs||{})[k])done++;
+    }
+    const pct=elapsed?Math.round(done/elapsed*100):0;
+    const color=anColor(hi);
+    const row=document.createElement('div');
+    row.className='bar-chart-row';
+    row.innerHTML=`
+      <div class="bar-chart-label">
+        <span class="bar-chart-name">${escHtml(h.name)}</span>
+        <span class="bar-chart-pct" style="color:${color};">${pct}%</span>
+      </div>
+      <div class="bar-chart-track">
+        <div class="bar-chart-fill" style="width:0%;background:${color};" data-pct="${pct}"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:1px;">${done}/${elapsed}日 完了</div>`;
+    chart.appendChild(row);
+  });
+  // アニメーション
+  requestAnimationFrame(()=>{
+    chart.querySelectorAll('.bar-chart-fill').forEach(el=>{
+      el.style.width=el.dataset.pct+'%';
+    });
+  });
+}
+
+// ③ ユーザー間比較（今月の毎日習慣達成率）
+function renderAnCompare(){
+  const all=getCache();
+  const card=document.getElementById('an-compare-card');
+  if(all.users.length<=1){
+    document.getElementById('an-compare-section').style.display='none';
+    return;
+  }
+  document.getElementById('an-compare-section').style.display='block';
+  const now=new Date();
+  const cy=now.getFullYear(),cm=now.getMonth(),cd=now.getDate();
+  const elapsed=cd;
+
+  const rows=all.users.map((u,ui)=>{
+    const habits=(u.habits||[]).filter(h=>(h.type||'daily')==='daily');
+    if(!habits.length)return{name:u.name,pct:0,done:0,total:0,color:anColor(ui),isMe:u.id===all.currentUserId};
+    let totalPossible=0,totalDone=0;
+    habits.forEach(h=>{
+      const created=h.createdAt||Object.keys(h.logs||{}).sort()[0]||TODAY;
+      for(let d=1;d<=elapsed;d++){
+        const k=dateKey(cy,cm,d);
+        if(k<created)continue;
+        totalPossible++;
+        if((h.logs||{})[k])totalDone++;
+      }
+    });
+    const pct=totalPossible?Math.round(totalDone/totalPossible*100):0;
+    return{name:u.name,pct,done:totalDone,total:totalPossible,color:anColor(ui),isMe:u.id===all.currentUserId};
+  }).sort((a,b)=>b.pct-a.pct);
+
+  card.innerHTML=`<div style="font-size:11px;color:var(--text3);margin-bottom:12px;">${cy}年${cm+1}月 / 経過${elapsed}日</div>`+
+  rows.map(r=>{
+    const meLabel=r.isMe?'<span style="font-size:10px;background:var(--accent-light);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;">自分</span>':'';
+    return`<div class="compare-row">
+      <div class="compare-name" style="color:${r.color};">${escHtml(r.name)}${meLabel}</div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-track">
+          <div class="compare-bar-fill" style="width:0%;background:${r.color};" data-pct="${r.pct}"></div>
+        </div>
+        <div class="compare-meta">${r.done}/${r.total}日</div>
+      </div>
+      <div class="compare-pct" style="color:${r.color};">${r.pct}%</div>
+    </div>`;
+  }).join('');
+  requestAnimationFrame(()=>{
+    card.querySelectorAll('.compare-bar-fill').forEach(el=>{el.style.width=el.dataset.pct+'%';});
+  });
+}
+
+document.getElementById('analytics-back-btn').addEventListener('click',()=>{showScreen('screen-list');render();});
+document.getElementById('an-prev-month').addEventListener('click',()=>{
+  anMonth--;if(anMonth<0){anMonth=11;anYear--;}renderAnRate();
+});
+document.getElementById('an-next-month').addEventListener('click',()=>{
+  anMonth++;if(anMonth>11){anMonth=0;anYear++;}renderAnRate();
+});
 document.getElementById('deleted-users-btn').addEventListener('click',()=>{
   overlay.classList.remove('open');
   const a=getCache();
@@ -1585,19 +2190,8 @@ document.getElementById('import-file').addEventListener('change',async e=>{
       let merged=0,added=0;
       imp.habits.forEach(ih=>{
         ih=migrateHabit(ih);
-        const ex=u.habits.find(h=>h.name===ih.name&&h.type===ih.type);
-        if(ex){
-          if((ih.updatedAt||0)>(ex.updatedAt||0)){
-            Object.assign(ex.logs,ih.logs||{});ex.updatedAt=ih.updatedAt;
-          }else{
-            // ローカルが新しい場合もリモートにしかないログキーだけ取り込む
-            Object.keys(ih.logs||{}).forEach(k=>{if(!(k in ex.logs))ex.logs[k]=ih.logs[k];});
-          }
-          merged++;
-        }else{
-          ih.updatedAt=ih.updatedAt||Date.now();
-          u.habits.push(ih);added++;
-        }
+        const ex=u.habits.find(h=>h.name===ih.name);
+        if(ex){Object.assign(ex.logs,ih.logs||{});merged++;}else{u.habits.push(ih);added++;}
       });
       setCache(a);render();await saveData();showToast(`✅ ${added}件追加・${merged}件統合しました`);
     }catch{showToast('❌ ファイルの読み込みに失敗しました');}
@@ -1696,20 +2290,32 @@ function scheduleAutoSync(){
     const local=getCache();
     // 他ユーザーのデータだけ静かにマージ
     let changed=false;
-    (remote.users||[]).forEach(ru=>{
-      const lu=local.users.find(u=>u.id===ru.id);
-      if(!lu){ru.habits=(ru.habits||[]).map(migrateHabit);ru.archive=(ru.archive||[]).map(migrateHabit);local.users.push(ru);changed=true;}
-      else{
-        Object.keys(ru.logs||{}).forEach(()=>{});
-        (ru.habits||[]).forEach(rh=>{
-          const lh=lu.habits.find(h=>h.name===rh.name&&h.type===rh.type);
-          if(lh){Object.keys(rh.logs||{}).forEach(k=>{if(!(k in (lh.logs||{}))){lh.logs[k]=rh.logs[k];changed=true;}});}
-        });
-      }
-    });
+    // 削除済みユーザーを先にマージして復活チェックに使う
     const remoteDeleted=remote.deletedUsers||[];
     const localDeleted=local.deletedUsers||[];
     remoteDeleted.forEach(ru=>{if(!localDeleted.find(u=>u.id===ru.id)){localDeleted.push(ru);changed=true;}});
+    (remote.users||[]).forEach(ru=>{
+      // ローカルで削除済みのユーザーはスキップ（復活させない）
+      if(localDeleted.find(u=>u.id===ru.id))return;
+      const lu=local.users.find(u=>u.id===ru.id);
+      if(!lu){ru.habits=(ru.habits||[]).map(migrateHabit);ru.archive=(ru.archive||[]).map(migrateHabit);local.users.push(ru);changed=true;}
+      else{
+        const deletedKeys=lu.deletedHabitKeys||[];
+        (ru.habits||[]).forEach(rh=>{
+          const lh=lu.habits.find(h=>h.name===rh.name&&h.type===rh.type);
+          if(lh){Object.keys(rh.logs||{}).forEach(k=>{if(!(k in (lh.logs||{}))){lh.logs[k]=rh.logs[k];changed=true;}});}
+          else{
+            const rhKey=(rh.createdAt||'')+'::'+(rh.name||'');
+            if(!deletedKeys.includes(rhKey)){lu.habits.push(migrateHabit({...rh}));changed=true;}
+          }
+        });
+        // goal タイプのテキスト更新をリモートから反映
+        (ru.habits||[]).filter(rh=>rh.type==='goal').forEach(rh=>{
+          const lh=lu.habits.find(h=>h.type==='goal'&&h.createdAt===rh.createdAt);
+          if(lh&&rh.updatedAt&&(!lh.updatedAt||rh.updatedAt>lh.updatedAt)){lh.name=rh.name;lh.updatedAt=rh.updatedAt;changed=true;}
+        });
+      }
+    });
     if(changed){local.deletedUsers=localDeleted;saveLocal(local);}
   },30000);
 }
